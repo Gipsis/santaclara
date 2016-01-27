@@ -26,6 +26,7 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 		super();  
 	}
 	
+	@SuppressWarnings("resource")
 	@Override
 	public List<Vendedor> getVendedores() throws FileNotFoundException {
 		// TODO Auto-generated method stub
@@ -35,13 +36,13 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 		List<Usuario> usuarios = usuarioDAO.getUsuarios();
 		
 		File file = new File(ruta);
- 		Scanner scaner = new Scanner(file);
-		while(scaner.hasNext())
+ 		Scanner scanner = new Scanner(file);
+		while(scanner.hasNext())
 		{
 			 Vendedor vendedor = new Vendedor();
-			 vendedor.setId(new Integer(scaner.skip("id:").nextLine().trim()));
+			 vendedor.setId(new Integer(scanner.skip("id:").nextLine().trim()));
 			 
-			 Scanner sc = new Scanner(scaner.skip("idRutas:").nextLine()).useDelimiter(",");
+			 Scanner sc = new Scanner(scanner.skip("idRutas:").nextLine()).useDelimiter(",");
 			 
 			 if (sc.hasNext())
 			 {
@@ -65,7 +66,7 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 			 
 		vendedores.add(vendedor);
 		}
-		scaner.close();
+		scanner.close();
 		//guardar demas datos del vendedor 
 		
 		for(Vendedor vendedor: vendedores)
@@ -90,6 +91,7 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 		UsuarioDAO usuarioDAO = new UsuarioDAO(); 
 		List<Usuario> usuarios = usuarioDAO.getUsuarios();
 		List<Vendedor> vendedores = getVendedores();
+		List<Ruta> rutas;
 		//buscar codigo el ultimo codigo Asignado 
 		if(vendedor.getId() == null )
 		{ 
@@ -102,7 +104,9 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 				}
 			}
 			usuarioDAO.guardar(vendedor);
-			vendedor.setId(i+1);
+			rutas = vendedor.getRutas();
+			vendedor = getVendedor(usuarioDAO.getUsuario(i+1));
+			vendedor.setRutas(rutas);
 			vendedores.add(vendedor);
 		}
 		else
@@ -110,16 +114,31 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 			for(Vendedor vendedor1 :vendedores)
 			{
 				if(vendedor1.getId().equals(vendedor.getId()))
-				{ 
-					vendedor1.setUsername(vendedor.getUsername());
-					vendedor1.setCedula(vendedor.getCedula());
-					vendedor1.setNombre(vendedor.getNombre());
-					vendedor1.setContrasena(vendedor.getContrasena());
+				{
+					Usuario usuario = new Usuario();
+					usuario.setId(vendedor.getId());
+					usuario.setUsername(vendedor.getUsername());
+					usuario.setCedula(vendedor.getCedula());
+					usuario.setNombre(vendedor.getNombre());
+					usuario.setContrasena(vendedor.getContrasena());
+					new UsuarioDAO().guardar(usuario);
+					
 					vendedor1.setRutas(vendedor.getRutas());
 				}
 			}
 		}
 		guardarTodo(vendedores);
+	}
+	
+	private Vendedor getVendedor(Usuario usuario) throws FileNotFoundException{
+				Vendedor vendedor = new Vendedor();
+				vendedor.setId(usuario.getId());
+				vendedor.setCedula(usuario.getCedula());
+				vendedor.setContrasena(usuario.getContrasena());
+				vendedor.setNombre(usuario.getNombre());
+				vendedor.setUsername(usuario.getUsername());
+				
+				return vendedor; 
 	}
 	@Override
 	public void eliminar(Vendedor vendedor) throws IOException {
@@ -161,21 +180,33 @@ public class VendedorDAO extends GenericoDAO implements IVendedorDAO{
 			fw.append("id:"+vendedor.getId().toString()+"\n");
 			List<Ruta> rutas = vendedor.getRutas();
 			String linea = new String(",");
-			if (vendedor.getRutas()==null)
-			{
-			linea = "";	
-			}
+		
+			if (rutas==null) linea = "";	
 			else
 			{
 				for(Ruta ruta : rutas ) 
 				{
-					linea =  linea+ruta.getId()+",";
+					linea =  linea+ruta.getId().toString()+",";
 				}
 			}
 			fw.append("idRutas:"+linea+"\n");
 		}
 		fw.close();
 	}
+	
+	public Boolean getVendedor(Vendedor vendedor) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		List<Vendedor> vendedores = getVendedores();
+		for(Vendedor vendedor1 :vendedores)
+		{
+				if(vendedor1.getUsername().equals(vendedor.getUsername())&&
+						!vendedor1.getId().equals(vendedor.getId()))
+				{ 
+					return true;
+				}
+		}
+		return false;
+    }
 	/*Estructura 
 	 * id:1
 	 * idRutas:,1,2,

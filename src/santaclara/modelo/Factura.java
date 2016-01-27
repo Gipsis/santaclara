@@ -1,37 +1,51 @@
 package santaclara.modelo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Factura {
 	
 	private Integer id;
 	private Date fecha;
-	private Double total;
-	private Double saldo;
-	private Double iva;
-	private Double descuento;
 	private Cliente cliente;
-	private Vendedor vendedor;
-	//private Almacen almacen;
-	//private Usuario vendedor
+	private Usuario vendedor;
+	private Almacen almacen;
+	private Boolean estado;
 	
+	private Double subTotalExento;
+	private Double subTotalGravado;
+	private Double descuento;
+	private Double ivaSobreBs;
+	private Double iva;
+	private Double totalAPagar;
+
 	public Factura() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Factura(Integer id, Date fecha, Double total, Double saldo,
-			Double iva, Double descuento, Cliente cliente,Vendedor vendedor) {
+	
+
+	public Factura(Integer id, Date fecha, Cliente cliente, Usuario vendedor,
+			Almacen almacen, Boolean estado, Double subTotalExento,
+			Double subTotalGravado, Double descuento, Double ivaSobreBs,
+			Double iva, Double totalAPagar) {
 		super();
 		this.id = id;
 		this.fecha = fecha;
-		this.total = total;
-		this.saldo = saldo;
-		this.iva = iva;
-		this.descuento = descuento;
 		this.cliente = cliente;
 		this.vendedor = vendedor;
+		this.almacen = almacen;
+		this.estado = estado;
+		this.subTotalExento = subTotalExento;
+		this.subTotalGravado = subTotalGravado;
+		this.descuento = descuento;
+		this.ivaSobreBs = ivaSobreBs;
+		this.iva = iva;
+		this.totalAPagar = totalAPagar;
 	}
-	
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -44,43 +58,117 @@ public class Factura {
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	public Double getTotal() {
-		return total;
-	}
-	public void setTotal(Double total) {
-		this.total = total;
-	}
-	public Double getSaldo() {
-		return saldo;
-	}
-	public void setSaldo(Double saldo) {
-		this.saldo = saldo;
-	}
-	public Double getIva() {
-		return iva;
-	}
-	public void setIva(Double iva) {
-		this.iva = iva;
-	}
+	
 	public Double getDescuento() {
 		return descuento;
 	}
 	public void setDescuento(Double descuento) {
 		this.descuento = descuento;
 	}
+	
 	public Cliente getCliente() {
 		return cliente;
 	}
+	
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	public Vendedor getVendedor() {
+	
+	public Usuario getVendedor() {
 		return vendedor;
 	}
-	public void setVendedor(Vendedor vendedor) {
+	
+	public void setVendedor(Usuario vendedor) {
 		this.vendedor = vendedor;
+	
+	}
+	
+	public Almacen getAlmacen() {
+		return almacen;
+	}
+	
+	public void setAlmacen(Almacen almacen) {
+		this.almacen = almacen;
+	}
+	
+	public Boolean getEstado() {
+		return estado;
+	}
+	
+	public void setEstado(Boolean estado) {
+		this.estado = estado;
+	}
+	
+	public String getEstadoStr() {
+		if (estado == null) return "";
+		if (getEstado().equals(true))return "Cancelada";
+		else return "Pendiente";
+		
 	}
 
+	public void setFecha(String cadena) throws ParseException {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			this.fecha = sdf.parse(cadena);
+	}
+		
+	public String getFechaStr(Date fecha) {
+		if (fecha==null)return "";
+		else{
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			return sdf.format(fecha);
+			} 
+		}
+		
+		public String getFechaStr() {
+			if (fecha==null)return "";
+			else{
+				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+				return sdf.format(fecha);
+			} 
+		}
+
+		public Double getSubTotalExento() {
+			return subTotalExento;
+		}
+
+		public void setSubTotalExento(Double subTotalExento) {
+			this.subTotalExento = subTotalExento;
+		}
+
+		public Double getSubTotalGravado() {
+			return subTotalGravado;
+		}
+
+		public void setSubTotalGravado(Double subTotalGravado) {
+			this.subTotalGravado = subTotalGravado;
+		}
+
+		public Double getIvaSobreBs() {
+			return ivaSobreBs;
+		}
+
+		public void setIvaSobreBs(Double ivaSobreBs) {
+			this.ivaSobreBs = ivaSobreBs;
+		}
+
+		public Double getIva() {
+			return iva;
+		}
+
+		public void setIva(Double iva) {
+			this.iva = iva;
+		}
+
+		public Double getTotalAPagar() {
+			return totalAPagar;
+		}
+
+		public void setTotalAPagar(Double totalAPagar) {
+			this.totalAPagar = totalAPagar;
+		}
+		
+	
+	
 /*
  * Estructura
  * 
@@ -92,6 +180,8 @@ public class Factura {
  *descuento:0
  *idCliente:2
  *idvendedor:2
+ *idAlmacen:2
+ *estado:Pendiente
  **/	
 
 }

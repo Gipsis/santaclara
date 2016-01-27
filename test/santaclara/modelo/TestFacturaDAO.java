@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import santaclara.Servicio.ServicioAlmacen;
 import santaclara.dao.impl.ClienteDAO;
 import santaclara.dao.impl.FacturaDAO;
 import santaclara.dao.impl.VendedorDAO;
@@ -32,12 +33,8 @@ public class TestFacturaDAO {
 		VendedorDAO vendedorDAO = new VendedorDAO();
 		
 		@SuppressWarnings("deprecation")
-		Factura factura1 = new Factura(
-				null,new Date("2015/10/05"),new Double("655"),
-				new Double("8329"),new Double("655"),
-				new Double("655"),
-				clienteDAO.getCliente(1),
-				vendedorDAO.getVendedor(1));
+		
+		Factura factura1 = null;//new Factura(null,new Date("2015/10/05"),clienteDAO.getCliente(1),vendedorDAO.getVendedor(1),new ServicioAlmacen().getAlmacen(2),true,0.0,100.0,0.0,100.0,12.0,112.0);
 			
 		facturaDAO.guardar(factura1);
 		assertNotNull(factura1.getId());

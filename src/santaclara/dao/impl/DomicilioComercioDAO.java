@@ -6,36 +6,52 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
- 
-
-
 import java.util.Scanner;
 
+import santaclara.Servicio.ServicioCliente;
 import santaclara.dao.IDomicilioComercioDAO;
-
+import santaclara.modelo.Cliente;
 import santaclara.modelo.DomicilioComercio;
 
 public class DomicilioComercioDAO extends GenericoDAO implements  IDomicilioComercioDAO{
 
 	private String ruta = "archivos/domicilioComercio.txt";
-	private Scanner scaner;
 
 	@Override
 	public List<DomicilioComercio> getDomicilioComercios() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		List<DomicilioComercio> domicilioComercios = new ArrayList<DomicilioComercio>();
+		ClienteDAO clienteDAO = new ClienteDAO();
 		File file = new File(ruta);
- 		scaner = new Scanner(file);
-		while(scaner.hasNext())
+		Scanner scanner = new Scanner(file);
+		while(scanner.hasNext())
 		{
 			 DomicilioComercio domicilioComercio = new DomicilioComercio();
-			 
-			 domicilioComercio.setId(new Integer(scaner.skip("idCliente:").nextLine().trim()));
-			 domicilioComercio.setTipo(scaner.skip("tipo:").nextLine().trim());
-			 
-			 domicilioComercios.add(domicilioComercio); 
+			 domicilioComercio.setId(new Integer(scanner.skip("idCliente:").nextLine()));
+			 domicilioComercio.setTipo(scanner.skip("tipo:").nextLine().toString().trim());
+			 domicilioComercio.setDiaVisita(new Integer(scanner.skip("diaVisita:").nextLine().trim()));
+			 domicilioComercios.add(domicilioComercio);
 		}
-		
+		//Cargo la info de Cliente
+		List<Cliente> clientes;
+		clientes = clienteDAO.getClientes();
+		for(DomicilioComercio domicilioComercio1 :domicilioComercios)
+		{
+			for(Cliente cliente: clientes)
+			{
+				if(domicilioComercio1.getId().equals(cliente.getId()))
+				{
+					domicilioComercio1.setRif(cliente.getRif());
+					domicilioComercio1.setId(cliente.getId());
+					domicilioComercio1.setRazonsocial(cliente.getRazonsocial());
+					domicilioComercio1.setDireccion(cliente.getDireccion());
+					domicilioComercio1.setTelefono(cliente.getTelefono());
+					domicilioComercio1.setRuta(cliente.getRuta());
+					break;
+				}
+			}
+		}			  
+		scanner.close();
 		return domicilioComercios;
 
 	}
@@ -43,38 +59,58 @@ public class DomicilioComercioDAO extends GenericoDAO implements  IDomicilioCome
 	@Override
 	public void guardar(DomicilioComercio domicilioComercio) throws IOException {
 		// TODO Auto-generated method stub
-		List<DomicilioComercio> DomicilioComercios = getDomicilioComercios();
+		List<Cliente> clientes = new ServicioCliente().getClientes();
+		List<DomicilioComercio> domicilioComercios = getDomicilioComercios();
 		//buscar codigo el ultimo codigo Asignado 
 		if(domicilioComercio.getId() == null )
 		{
 			int i = 0;
-			for(DomicilioComercio domicilioComercio1 : DomicilioComercios)
+			for(Cliente cliente : clientes)
 			{
-				if(domicilioComercio1.getId()> i )
+				if(cliente.getId()> i )
 				{
-					i = domicilioComercio1.getId();
+					i = cliente.getId();
 				}
 			}
+			
+			Cliente cliente = new Cliente();
+			
+			cliente.setId(domicilioComercio.getId());
+			cliente.setRif(domicilioComercio.getRif());
+			cliente.setDireccion(domicilioComercio.getDireccion());
+			cliente.setTelefono(domicilioComercio.getTelefono());
+			cliente.setRazonsocial(domicilioComercio.getRazonsocial());
+			cliente.setRuta(domicilioComercio.getRuta());
+			
+			new ClienteDAO().guardar(cliente);
+			
 			domicilioComercio.setId(i+1);
-			DomicilioComercios.add(domicilioComercio);
+			domicilioComercios.add(domicilioComercio);
 		}
 		else
 		{
-			for(DomicilioComercio domicilioComercio1 :DomicilioComercios)
+			for(DomicilioComercio domicilioComercio1 :domicilioComercios)
 			{
+				Cliente cliente = new Cliente();
+				
+				cliente.setId(domicilioComercio.getId());
+				cliente.setRif(domicilioComercio.getRif());
+				cliente.setDireccion(domicilioComercio.getDireccion());
+				cliente.setTelefono(domicilioComercio.getTelefono());
+				cliente.setRazonsocial(domicilioComercio.getRazonsocial());
+				cliente.setRuta(domicilioComercio.getRuta());
+				
+				new ClienteDAO().guardar(cliente);
+				
 				if(domicilioComercio1.getId().equals(domicilioComercio.getId()))
 				{ 
-					domicilioComercio1.setRif(domicilioComercio.getRif());
-					domicilioComercio1.setRazonsocial(domicilioComercio.getRazonsocial());
-					domicilioComercio1.setDireccion(domicilioComercio.getDireccion());
-					domicilioComercio1.setTelefono(domicilioComercio.getTelefono());
-					domicilioComercio1.setRuta(domicilioComercio.getRuta());
 					domicilioComercio1.setTipo(domicilioComercio.getTipo());
+					domicilioComercio1.setDiaVisita(domicilioComercio.getDiaVisita());
 				}
 			}
 		}
-		guardarTodo(DomicilioComercios);
-
+		guardarTodo(domicilioComercios);
+ 
 	}
 
 	@Override
@@ -116,6 +152,7 @@ public class DomicilioComercioDAO extends GenericoDAO implements  IDomicilioCome
 					? "  ":domicilioComercio.getId().toString())+"\n");
 			
 			fw.append("tipo:"+domicilioComercio.getTipo().toString()+"\n");
+			fw.append("diaVisita:"+domicilioComercio.getDiaVisita().toString()+"\n");
 			
 		}
 		fw.close();
@@ -127,6 +164,7 @@ public class DomicilioComercioDAO extends GenericoDAO implements  IDomicilioCome
  	La Estructura de los Archivos sera la Siguiente 
 idCliente:1
 tipo:C
+diaVisita:37
 * */
 	
 } 

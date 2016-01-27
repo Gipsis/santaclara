@@ -11,30 +11,30 @@ import santaclara.modelo.EmpaqueProducto;
 
 public  class EmpaqueProductoDAO extends GenericoDAO implements IEmpaqueProductoDAO{
 	
-private String ruta = "archivos/empaqueProducto.txt";
-private Scanner scaner;	
-public List<EmpaqueProducto> getEmpaques() throws NumberFormatException, IOException {
-	// TODO Auto-generated method stub
-	List<EmpaqueProducto> empaques = new ArrayList<EmpaqueProducto>();
-	File file = new File(ruta);
-		scaner = new Scanner(file);
-	while(scaner.hasNext())
-	{
-		 EmpaqueProducto empaque = new EmpaqueProducto();
-		 empaque.setId(new Integer(scaner.skip("id:").nextLine().trim()));
-		 //Asigna Producto
-		 ProductoDAO productoDAO = new ProductoDAO();
-		 empaque.setProducto(
-				 productoDAO.getProducto(
-						 new Integer(scaner.skip("idProducto:").nextLine().trim())));
-		 empaque.setCantidad(new Integer(scaner.skip("cantidad:").nextLine().trim()));
-		 
-		 empaques.add(empaque); 
-	}
-	
-	return empaques;
+private String ruta = "archivos/empaqueProductos.txt";
 
-}
+	public List<EmpaqueProducto> getEmpaques() throws NumberFormatException, IOException {
+		// TODO Auto-generated method stub
+		List<EmpaqueProducto> empaqueProductos = new ArrayList<EmpaqueProducto>();
+		File file = new File(ruta);
+		Scanner scanner = new Scanner(file);
+		while(scanner.hasNext())
+		{
+			 EmpaqueProducto empaqueProducto = new EmpaqueProducto();
+			 empaqueProducto.setId(new Integer(scanner.skip("id:").nextLine().toString().trim()));
+			 //Asigna Producto
+			 ProductoDAO productoDAO = new ProductoDAO();
+			 empaqueProducto.setProducto(
+					 productoDAO.getProducto(
+							 new Integer(scanner.skip("idProducto:").nextLine().trim())));
+			 empaqueProducto.setCantidad(new Integer(scanner.skip("cantidad:").nextLine().trim()));
+			 
+			 empaqueProductos.add(empaqueProducto); 
+		}
+		scanner.close();
+		return empaqueProductos;
+	
+	}
 
 	public void	guardar(EmpaqueProducto EmpaqueProducto) throws IOException {
 		// TODO Auto-generated method stub

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
 import santaclara.dao.IRutaDAO;
 import santaclara.modelo.Ruta;
 
@@ -19,22 +20,22 @@ public class RutaDAO extends GenericoDAO implements IRutaDAO  {
 		// TODO Auto-generated method stub
 		List<Ruta> rutas = new ArrayList<Ruta>();
 		File file = new File(ruta);
- 		Scanner scaner = new Scanner(file);
-		while(scaner.hasNext())
+ 		Scanner scanner = new Scanner(file);
+		while(scanner.hasNext())
 		{
 			Ruta ruta = new Ruta();
-			ruta.setId(new Integer(scaner.skip("id:").nextLine().trim()));
+			ruta.setId(new Integer(scanner.skip("id:").nextLine().toString().trim()));
 			
 			//guardo demas los datos de la Zona 
 			ZonaDAO zonaDAO = new ZonaDAO();
 			ruta.setZona(
 				zonaDAO.getZona(
-					new Integer(scaner.skip("zona:").nextLine().trim())));
+					new Integer(scanner.skip("zona:").nextLine().trim())));
 			
-			ruta.setNombre(scaner.skip("nombre:").nextLine());
+			ruta.setNombre(scanner.skip("nombre:").nextLine());
 			rutas.add(ruta); 
 		}
-		scaner.close();
+		scanner.close();
 		return rutas;
 	}
 
@@ -106,7 +107,7 @@ public class RutaDAO extends GenericoDAO implements IRutaDAO  {
 		{
 			fw.append("id:"+ruta1.getId().toString()+"\n");
 			fw.append("zona:"+(ruta1.getZona() == null 
-					? " ": ruta1.getId().toString())+"\n");
+					? " ": ruta1.getZona().getId().toString())+"\n");
 			fw.append("nombre:"+ruta1.getNombre().toString()+"\n");
 			
 		}
@@ -126,6 +127,19 @@ public class RutaDAO extends GenericoDAO implements IRutaDAO  {
 		}
 	}
 	
+	public Boolean getRuta(Ruta ruta) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		List<Ruta> rutas = getRutas();
+		for(Ruta ruta1 :rutas)
+		{
+				if(ruta1.getNombre().equals(ruta.getNombre())&&
+						!ruta1.getId().equals(ruta.getId()))
+				{ 
+					return true;
+				}
+		}
+		return false;
+    }
 	
 /*Estructura
 id:0

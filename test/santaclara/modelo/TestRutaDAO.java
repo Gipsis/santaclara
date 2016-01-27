@@ -17,7 +17,7 @@ public class TestRutaDAO {
 	public void RutasTest() throws FileNotFoundException {
 		RutaDAO rutaDAO = new RutaDAO();
 		assertNotNull(rutaDAO);
-		assertEquals(5,rutaDAO.getRutas().size());
+		assertEquals(7,rutaDAO.getRutas().size());
 	}
 	@Test
 	public void addRemoveRutaTest() throws IOException {
@@ -38,5 +38,6 @@ public class TestRutaDAO {
 		rutaDAO.eliminar(ruta);
 		assertEquals(almacenes.size(),rutaDAO.getRutas().size());
 		rutaDAO.Mostrar();
+	
 	}
 }

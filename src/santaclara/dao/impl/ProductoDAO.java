@@ -3,6 +3,7 @@ package santaclara.dao.impl;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +13,7 @@ import santaclara.modelo.Producto;
 
 public  class ProductoDAO extends GenericoDAO implements IProductoDAO{
 
-	private String ruta = "archivos/producto.txt";
+	private String ruta = "archivos/productos.txt";
 	private Scanner scaner;
 	
 	@Override
@@ -42,6 +43,14 @@ public  class ProductoDAO extends GenericoDAO implements IProductoDAO{
 							 new Integer(scaner.skip("idSabor:").nextLine().trim())));
 			 producto.setNombre(scaner.skip("nombre:").nextLine());
 			 producto.setPrecio(new Double(scaner.skip("precio:").nextLine().trim()));
+			 
+			 producto.setDescuento(new Double(scaner.skip("descuento:").nextLine().trim()));
+			 
+			 String linea = new String(scaner.skip("estadoIva:").nextLine().trim());
+			 
+			 if(linea.equals("exento"))
+			 producto.setIva(true);
+			 else  if(linea.equals("gravado")) producto.setIva(false);
 			 
 			 productos.add(producto);
 		}
@@ -79,6 +88,8 @@ public  class ProductoDAO extends GenericoDAO implements IProductoDAO{
 					producto1.setSabor(producto.getSabor());
 					producto1.setNombre(producto.getNombre());
 					producto1.setPrecio(producto.getPrecio());
+					producto1.setDescuento(producto.getDescuento());
+					producto1.setIva(producto.getIva());
 				}
 			}
 		}
@@ -97,7 +108,6 @@ public  class ProductoDAO extends GenericoDAO implements IProductoDAO{
 				break;
 			}
 		}
-		///guardar Todo 
 		guardarTodo(productos);
 		
 	}
@@ -144,10 +154,13 @@ public  class ProductoDAO extends GenericoDAO implements IProductoDAO{
 			
 			fw.append("nombre:"+producto.getNombre()+"\n");
 			fw.append("precio:"+producto.getPrecio()+"\n");
+			fw.append("descuento:"+producto.getPrecio()+"\n");
+			if(producto.getIva().booleanValue()==true) fw.append("estadoIva:exento\n");
+			else if(producto.getIva().booleanValue()==false) fw.append("estadoIva:gravado\n");
+			
 		}
 		fw.close();
 	}
-
 	
 	/*
  	La Estructura de los Archivos sera la Siguiente 
@@ -157,6 +170,8 @@ public  class ProductoDAO extends GenericoDAO implements IProductoDAO{
 	idSabor:3
 	nombre:CocaCola
 	precio:500
+	descuento:0.0
+	estadoIva:gravado
 
   * */
 	

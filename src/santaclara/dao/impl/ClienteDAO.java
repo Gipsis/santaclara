@@ -14,24 +14,23 @@ import santaclara.modelo.Cliente;
 public class ClienteDAO extends GenericoDAO implements IClienteDAO{
 
 	private String ruta = "archivos/Clientes.txt";
-	private Scanner scaner;
-	
+
 	@Override
 	public List<Cliente> getClientes() throws FileNotFoundException {
 		// TODO Auto-generated method stub
 		// Listar Todos lo Clientes 
 		List<Cliente> clientes = new ArrayList<Cliente>();
 		File file = new File(ruta);
- 		scaner = new Scanner(file);
-		while(scaner.hasNext())
+ 		Scanner  scanner = new Scanner(file);
+		while(scanner.hasNext())
 		{
 			 Cliente cliente = new Cliente();
-			 cliente.setId(new Integer(scaner.skip("id:").nextLine().trim()));
-			 cliente.setRif(scaner.skip("rif:").nextLine().trim());
-			 cliente.setRazonsocial(scaner.skip("razonsocial:").nextLine().trim());
-			 cliente.setDireccion(scaner.skip("direccion:").nextLine());
-			 cliente.setTelefono(scaner.skip("telefono:").nextLine().trim());
-			 String linea =scaner.skip("ruta:").nextLine().trim();
+			 cliente.setId(new Integer(scanner.skip("id:").nextLine().trim()));
+			 cliente.setRif(scanner.skip("rif:").nextLine().trim());
+			 cliente.setRazonsocial(scanner.skip("razonsocial:").nextLine().trim());
+			 cliente.setDireccion(scanner.skip("direccion:").nextLine());
+			 cliente.setTelefono(scanner.skip("telefono:").nextLine().trim());
+			 String linea =scanner.skip("ruta:").nextLine().trim();
 			 if(linea.trim().length() == 0)
 			 {
 				 cliente.setRuta(null);
@@ -43,7 +42,7 @@ public class ClienteDAO extends GenericoDAO implements IClienteDAO{
 			 }
 			 clientes.add(cliente); 
 		}
-		
+  	    scanner.close();
 		return clientes;
 	}
 	@Override
@@ -84,17 +83,19 @@ public class ClienteDAO extends GenericoDAO implements IClienteDAO{
 	@Override
 	public void eliminar(Cliente cliente) throws IOException {
 		// TODO Auto-generated method stub
-		List<Cliente> clientes = getClientes();
-		for(Cliente cliente1 :clientes)
+		if (cliente != null)
 		{
-			if(cliente1.getId().equals(cliente.getId()))
+			List<Cliente> clientes = getClientes();
+			for(Cliente cliente1 :clientes)
 			{
-				clientes.remove(cliente1);
-				break;
+				if(cliente1.getId().equals(cliente.getId()))
+				{
+					clientes.remove(cliente1);
+					break;
+				}
 			}
+			guardarTodo(clientes);
 		}
-		guardarTodo(clientes);
-		
 	}
 
 	@Override
@@ -106,12 +107,24 @@ public class ClienteDAO extends GenericoDAO implements IClienteDAO{
 			if(cliente1.getId().equals(id))
 			{
 				return cliente1;
-				
 			}
 		}
 		return null;
     }
-
+	
+	public Boolean getCliente(Cliente cliente) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		List<Cliente> clientes = getClientes();
+		for(Cliente cliente1 :clientes)
+		{
+				if(cliente1.getRazonsocial().equals(cliente.getRazonsocial())&&
+						!cliente1.getId().equals(cliente.getId()))
+				{ 
+					return true;
+				}
+		}
+		return false;
+    }
 	
 	public ClienteDAO(String ruta) {
 		super();
@@ -168,6 +181,19 @@ public class ClienteDAO extends GenericoDAO implements IClienteDAO{
 	telefono:04161556613
 	ruta:1
   * */
+	@Override
+	public Cliente getCliente(String rif) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		List<Cliente> clientes = getClientes();
+		for(Cliente cliente1 :clientes)
+		{
+			if(cliente1.getRif().equals(rif))
+			{
+				return cliente1;
+			}
+		}
+		return null;
+	}
 	
 } 
 

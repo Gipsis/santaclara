@@ -1,4 +1,5 @@
-idCliente:1
-idFacturas:,1,2,
-idCliente:2
-idFacturas:,3,4,
+idCliente:3
+idCliente:4
+idCliente:7
+idCliente:13
+idCliente:14
