@@ -3,7 +3,6 @@ package santaclara.controlador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -11,7 +10,7 @@ import javax.swing.JTable;
 import santaclara.Servicio.ServicioAlmacen;
 import santaclara.modelo.Almacen;
 import santaclara.vista.AlmacenesUI;
-
+ 
 public class ContAlmacenes extends ContGeneral implements IContGeneral{
 	
 	private ServicioAlmacen servicioAlmacen;
@@ -33,7 +32,11 @@ public class ContAlmacenes extends ContGeneral implements IContGeneral{
 	@Override
 	public JPanel getVista() {
 		// TODO Auto-generated method stub
-		return vista;
+		return vista; 
+	}
+	
+	public AlmacenesUI getVistaAlmacen(){
+		return vista; 
 	}
 	
 	public ActionListener nuevo(){
@@ -237,5 +240,5 @@ public class ContAlmacenes extends ContGeneral implements IContGeneral{
 				vista.quitarNuevo();
 			}
 		};
-	}
+	} 
 }

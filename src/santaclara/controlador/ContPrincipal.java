@@ -1,15 +1,21 @@
 package santaclara.controlador;
-
-import java.awt.BorderLayout;
+ 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import santaclara.controlador.consultas.ContDetalleFacturaMesAlmacen;
+import santaclara.controlador.consultas.ContListCantRefrecoPresentCapacFacturadoZona;
+import santaclara.controlador.consultas.ContListCantRefrescoSaborVendidoAlmacen;
+import santaclara.controlador.consultas.ContListClienteTipoZona;
+import santaclara.controlador.consultas.ContMontoFacturadoMesZonaTipoPago;
+import santaclara.controlador.reportes.ContReportMontFacturadoAlmacen;
+import santaclara.controlador.reportes.ContReportMontFacturadoVendedor;
 import santaclara.modelo.Usuario;
 import santaclara.vista.PrincipalUI;
+import santaclara.vista.herramientas.VistaGenericaUI;
 
 public  class ContPrincipal {
 	
@@ -39,13 +45,13 @@ public  class ContPrincipal {
 	}
 	
 
+	@SuppressWarnings("deprecation")
 	void agregarPanel(JPanel panel)
 	{
-		//vista.getFrame().getContentPane().removeAll();
-		//vista.getFrame().getContentPane().add(panel);
-		//vista.getFrame().getContentPane().removeAll();
 		vista.getFrame().setContentPane(panel);
+		vista.getFrame().resize(VistaGenericaUI.getWidthPantalla(),VistaGenericaUI.getHeightPantalla());
 		vista.getFrame().repaint();
+
 	}
 	
 	void quitarPanel(){
@@ -75,7 +81,6 @@ public  class ContPrincipal {
 		this.controlador = controlador;
 	}
 
-	
 	/************ Salir Session *************/
 	public ActionListener salirSesion() {
 		// TODO Auto-generated method stub
@@ -174,9 +179,112 @@ public  class ContPrincipal {
 				{
 					ActivarPedidos(null,"",null);
 				}
+				else if(e.getSource().equals(vista.getMntReportMontFacturaAlmacen())){
+					ActivarReportFacturadoAlmacen();
+				}
+				else if(e.getSource().equals(vista.getMntReportMontFacturaVendedor())){
+					ActivarReportFacturadoVendedor();
+				}
+				else if(e.getSource().equals(vista.getMntConsultaDetalleFacturaMesAlmacen())){
+					ActivarConsultaDetalleFacturaMesAlmacen();
+				}
+				else if(e.getSource().equals(vista.getMntListCantRefrescoSaborVendidoAlmacen())){
+					ActivarListCantRefrescoSaborVendidoAlmacen();
+				}
+				else if(e.getSource().equals(vista.getMntListCantRefrescoPresentCapacFacturadoZona())){
+					ActivarListCantRefrescoPresentCapacFacturadoZona();
+				}
+				else if(e.getSource().equals(vista.getMntListClienteZonaTipo())){
+					ActivarListClienteZonaTipo();
+				}
+				else if(e.getSource().equals(vista.getMntMontoFacturadoMesZonaTipoPago())){
+					ActivarMontoFacturadoMesZonaTipoPago();
+				}
 			}
 		};
 	}
+	 
+public void ActivarConsultaDetalleFacturaMesAlmacen(){
+		
+		try {
+			
+			controlador = new ContDetalleFacturaMesAlmacen(ContPrincipal.this);
+		}
+		catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+public void ActivarListCantRefrescoSaborVendidoAlmacen(){
+	
+	try {
+		
+		controlador = new ContListCantRefrescoSaborVendidoAlmacen(ContPrincipal.this);
+	}
+	catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+}
+public void ActivarListCantRefrescoPresentCapacFacturadoZona(){
+	
+	try {
+		
+		controlador = new ContListCantRefrecoPresentCapacFacturadoZona(ContPrincipal.this);
+	}
+	catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+}
+public void ActivarListClienteZonaTipo(){
+	
+	try {
+		
+		controlador = new ContListClienteTipoZona(ContPrincipal.this);
+	}
+	catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+}
+public void ActivarMontoFacturadoMesZonaTipoPago(){
+	
+	try {
+		
+		controlador = new ContMontoFacturadoMesZonaTipoPago(ContPrincipal.this);
+	}
+	catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+}
+
+public void ActivarReportFacturadoAlmacen(){
+	
+	try {
+
+		controlador = new ContReportMontFacturadoAlmacen(ContPrincipal.this);
+	}
+	catch (Exception e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+}
+	
+	
+public void ActivarReportFacturadoVendedor(){
+		
+		try {
+
+			controlador = new ContReportMontFacturadoVendedor(ContPrincipal.this);
+		}
+		catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+	
 	public void ActivarRutas(){
 		// TODO Auto-generated method stub
 		try {
@@ -197,6 +305,7 @@ public  class ContPrincipal {
 			e1.printStackTrace();
 		}
 	}
+
 	public void ActivarClientes(Object objetContCache,Object objetContCachePresente,Object objetClassVista) {
 		// TODO Auto-generated method stub
 		try {
@@ -380,9 +489,7 @@ public  class ContPrincipal {
 		if (!cacheObjet.empty())
 		{
 			Object obtetContCache = cacheObjet.pop();
-			
 			Object obtetContCachePresente = obtetContCache;// el objetControlador presente
-			
 			obtetContCache = cacheObjet.pop();
 			
 			switch (obtetContCache.getClass().getName()) {
@@ -421,7 +528,16 @@ public  class ContPrincipal {
 			break;
 			case "santaclara.controlador.ContPedidos":	ActivarPedidos(obtetContCache,obtetContCachePresente,objectClassVista);
 			break;
- 
+			case "santaclara.controlador.reportes.ContReportMontFacturadoAlmacen":	ActivarReportFacturadoAlmacen();
+			break;
+			case "santaclara.controlador.reportes.ContReportMontFacturadoVendedor":	ActivarReportFacturadoVendedor();
+			break;
+			case "santaclara.controlador.cansultas.ContDetalleFacturaMesAlmacen":	ActivarConsultaDetalleFacturaMesAlmacen();
+			break;
+			case "santaclara.controlador.cansultas.ContListCantRefrescoSaborVendidoAlmacen":	ActivarListCantRefrescoSaborVendidoAlmacen();;
+			break;
+			case "santaclara.controlador.cansultas.ContMontoFacturadoMesZonaTipoPago":	ActivarMontoFacturadoMesZonaTipoPago();;
+			break;
 			default:
 				break;
 			}

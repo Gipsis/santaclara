@@ -22,6 +22,7 @@ import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.swingbinding.JTableBinding;
 import org.jdesktop.swingbinding.SwingBindings;
 
+ 
 import net.miginfocom.swing.MigLayout;
 import santaclara.controlador.ContAlmacenes;
 import santaclara.modelo.Almacen;
@@ -36,7 +37,6 @@ public class AlmacenesUI extends VistaGenericaUI {
 	private JButton btnSalir;
 	private JButton btnABuscar;
 	private JButton btnEliminar;
-	
 	@SuppressWarnings("rawtypes")
 	private JTableBinding binAlmacenes; 
 	private JTextField txtABuscar;
@@ -56,7 +56,7 @@ public class AlmacenesUI extends VistaGenericaUI {
 		dibujarPanelTabla();
 		btnNuevo = new JButton("Nuevo");
 		btnNuevo.addActionListener(contAlmacenes.nuevo());
-		
+
 		btnAtras = new JButton("Atras");
 		btnAtras.addActionListener(contAlmacenes.atras());
 		//btnAtras.setBounds(5, 15, 92, 16);
@@ -64,8 +64,8 @@ public class AlmacenesUI extends VistaGenericaUI {
 		btnAtras.setBackground(Color.DARK_GRAY);
 		btnAtras.setIcon(new ImageIcon("img/gestion/AtrasCurva.png"));
 		btnAtras.setFont(new Font("Dialog", Font.BOLD, 10));
-		
-				getPnBotones().add(btnAtras);
+		getPnBotones().add(btnAtras);
+
 		//btnNuevo.setBounds(100, 15, 103, 16);
 		btnNuevo.setForeground(Color.WHITE);
 		btnNuevo.setBackground(Color.DARK_GRAY);
@@ -95,6 +95,8 @@ public class AlmacenesUI extends VistaGenericaUI {
 		//btnEliminar.setBounds(312, 15, 110, 16);
 		getPnBotones().add(btnEliminar);
 		
+ 
+ 
 		btnSalir = new JButton("Salir");
 		btnSalir.addActionListener(contAlmacenes.salir());
 		//btnSalir.setBounds(425, 15, 90, 16);
